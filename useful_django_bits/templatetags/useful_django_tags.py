@@ -74,14 +74,14 @@ def get_verbose_name(model, field: str):
 
 @register.filter
 def make_range(number, start_index=0):
-    """Returns a range from `start_index` up to `number`.
+    """Returns a range with `number` elements, starting from `start_index`.
 
     Useful for iterating over a number, for example when using pagination, assuming there are 10 pages:
 
     {% for page_number in paginator.num_pages|make_range:"1" %}
 
     Will produce range(1, 11) - allowing you to use page numbers 1 to 10 in your template.
-    :param number: the maximum number for the range (exclusive)
+    :param number: the number of elements in the range
     :param start_index: the starting number for the range (inclusive)
     :return: a Python range object according to the given parameters
     """

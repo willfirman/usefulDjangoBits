@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Useful Django Tags Demos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    {% load useful_django_tags %}
+    <h1>Useful Django Tags Demos</h1>
+    <p>Demonstrations of how you might use the template tags and filters included in <code>useful_django_tags.py</code></p>
+
+    <h2><code>get_attr</code></h2>
+    <p>
+        This template includes a list of field names which belong to the <code>TemplateTagsDemo</code> model:
+        <code>get_attr_fields = {{ get_attr_fields }}</code> as well as an instance of that model, <code>tags_demo</code>.
+
+        We can iterate over them using the following:
+    </p>
+    <pre><code>
+{% templatetag openblock %} for field in get_attr_fields {% templatetag closeblock %}
+    {% templatetag openvariable %} field {% templatetag closevariable %}: {% templatetag openvariable %} tags_demo|get_attr:field {% templatetag closevariable %}
+{% templatetag openblock %} endfor {% templatetag closeblock %}
+    </code></pre>
+    <p>Here's the result:</p>
+    <ol>
+        {% for field in get_attr_fields %}
+            <li>{{ field }}: {{ tags_demo|get_attr:field }}</li>
+        {% endfor %}
+    </ol>
+<p>You can see how the filter behaves in each case:</p>
+<ol>
+    <li><code>demo_integer</code> is a choices field, so the result of <code>get_demo_integer_display()</code> is returned</li>
+    <li><code>demo_char</code> isn't a choices field - its value is returned as you'd expect</li>
+    <li>
+        <code>return_hello</code> is a function. If we used Python's built-in <code>getattr(tags_demo, 'return_hello')</code>
+        we'd get something like <samp>&lt;function TemplateTagsDemo.return_hello at [address]&gt;</samp>. Instead the
+        <code>get_attr</code> tag returns the function's result - just like you'd get from
+        <code>{% templatetag openvariable %} tags_demo.return_hello {% templatetag closevariable %}</code>
+    </li>
+</ol>
+
+<h2><code>get_verbose_name</code></h2>
+<p>
+    Here's the result of <code>{% templatetag openblock %} tags_demo|get_verbose_name:'demo_integer' {% templatetag closeblock %}</code>:
+    <samp>{{ tags_demo|get_verbose_name:'demo_integer' }}</samp>. The case specified in the field's <code>verbose_name</code>
+    is preserved.
+</p>
+<p>Using the same filter with the <code>demo_char</code> field applies title case: <samp>{{ tags_demo|get_verbose_name:'demo_char' }}</samp></p>
+
+<h2><code>make_range</code></h2>
+<p>
+    This one is pretty simple. Imagine you wanted to add pagination controls. Assuming your number of pages is in a
+    context variable called <code>num_pages</code>, you can do:
+</p>
+<pre><code>
+{% templatetag openblock %} for page_number in num_pages|make_range:"1" {% templatetag closeblock %}
+    Page {% templatetag openvariable %} page_number {% templatetag closevariable %}
+{% templatetag openblock %} endfor {% templatetag closeblock %}
+</code></pre>
+<p>And you'll be left with a range object that starts at 1 and ends at <code>num_pages</code> (inclusive).</p>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

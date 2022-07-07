@@ -7,4 +7,5 @@ At some point in the future I intend to make it into an installable Django app a
 full-blown Django project so to use any of the useful bits, you'll need to copy them into your own source files.
 
 The only files of interest are:
-- `useful_django_bits/templatetags/useful_django_tags.py` - a collection of template tags that might be helpful
+- `useful_django_bits/templatetags/useful_django_tags.py` - a collection of template tags that might be helpful. If you
+  run the Django project, you can see usage examples at `/demos/useful_django_tags`.
